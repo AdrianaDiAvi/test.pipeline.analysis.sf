@@ -56,7 +56,7 @@ pipeline {
 
             '''
             }
-        input('Do you want to proceed')
+        
         }
 
         stage('Docker-compose install'){
@@ -90,7 +90,7 @@ pipeline {
 
             '''
             }
-        input('Do you want to proceed')
+        
         }
         
 }
