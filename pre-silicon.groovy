@@ -29,10 +29,13 @@ pipeline {
             
             sh '''
 
-            
-            git clone --branch master https://${GITHUB_CREDS_USR}:${GITHUB_CREDS_PSW}@${ONESOURCE_REPO} ${ONESOURCE_DIR}
-            dir("${WORKSPACE}/pre-silicon-triage"){
-  
+            mkdir ${ONESOURCE_DIR}
+            git clone https://${GITHUB_CREDS_USR}:${GITHUB_CREDS_PSW}@${ONESOURCE_REPO} ${ONESOURCE_DIR}
+            '''
+        
+        dir("${WORKSPACE}/${ONESOURCE_DIR}"){
+
+            sh '''
             python3 -m venv .my_env
             source .venv/bin/activate
             pip3 install --upgrade pip
