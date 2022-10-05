@@ -64,6 +64,7 @@ pipeline {
         dir("${WORKSPACE}/${ONESOURCE_DIR}"){
             sh '''
             docker-compose up -d
+            docker ps
 
             '''
         }
@@ -87,7 +88,7 @@ pipeline {
         stage("Restore for the mongo db"){
             steps{
             sh '''
-            docker exec -ti mongodb bash
+            docker exec --tty mongodb bash
             mongorestore --drop builds-backup-100322_1603
 
             '''
