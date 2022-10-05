@@ -1,16 +1,4 @@
 #!/usr/bin/env groovy
-def AnalysisTools(){
-  checkout([$class: 'GitSCM', doGenerateSubmoduleConfigurations: false,
-    extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: "${Workspace}/pre-silicon-triage"]],
-    submoduleCfg: [], branches: [[name: 'master']], userRemoteConfigs: [[credentialsId: 'one-source-token-personal',
-    url: 'https://github.com/AdrianaDiAvi/applications.infrastructure.services-framework.pre-silicon-triage.git']]])
- dir("${WORKSPACE}/pre-silicon-triage/applications.infrastructure.services-framework.pre-silicon-triage/buid-database"){
-  sh '''
-
-    '''
-    
-  }
-}
 
 pipeline {
     agent {
@@ -41,7 +29,7 @@ pipeline {
             
             sh '''
             
-            git clone --branch development https://AdrianaDiAvi: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@${ONESOURCE_REPO} ${ONESOURCE_DIR}
+            git clone --branch master https://AdrianaDiAvi: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@${ONESOURCE_REPO} ${ONESOURCE_DIR}
             git remote add upstream https://github.com/AdrianaDiAvi/applications.infrastructure.services-framework.pre-silicon-triage.git
             dir("${WORKSPACE}/pre-silicon-triage"){
   
