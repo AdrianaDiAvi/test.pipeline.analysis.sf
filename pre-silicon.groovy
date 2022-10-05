@@ -41,7 +41,7 @@ pipeline {
             
             sh '''
             
-            git clone --branch master https://AdrianaDiAvi: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@${ONESOURCE_REPO} ${ONESOURCE_DIR}
+            git clone --branch development https://AdrianaDiAvi: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@${ONESOURCE_REPO} ${ONESOURCE_DIR}
             git remote add upstream https://github.com/AdrianaDiAvi/applications.infrastructure.services-framework.pre-silicon-triage.git
             dir("${WORKSPACE}/pre-silicon-triage"){
   
