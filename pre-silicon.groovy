@@ -59,19 +59,26 @@ pipeline {
             sudo curl -L "https://github.com/docker/compose/releases/download/1.23.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
             sudo chmod +x /usr/local/bin/docker-compose
             docker-compose --version
+            
+            '''
+        dir("${WORKSPACE}/${ONESOURCE_DIR}"){
+            sh '''
             docker-compose up -d
 
             '''
+        }
             }
         }
 
         stage("Backup from artifactory"){
             steps{
+        dir("${WORKSPACE}/${ONESOURCE_DIR}"){
             sh '''
             curl -sSf -H "X-JFrog-Art-Api:AKCp8kq2vs8PPFLb37nAsPU7uMHMWXwqe4L2dy1DVQpc8obVMArgioc9hw3BF62XJwoKGz6qc" -O "https://ubit-artifactory-or.intel.com/artifactory/presipipeline-or-local/db-backup/builds-backup-100322_1603.tar"
             tar xvf builds-backup-100322_1603.tar
-            docker cp /home/adiazavi/applications.infrastructure.services-framework.pre-silicon-triage/builds-backup-100322_1603 mongodb:/data/db
+            docker cp /applications.infrastructure.services-framework.pre-silicon-triage/builds-backup-100322_1603 mongodb:/data/db
             '''
+        }
             }
         }
         
