@@ -30,7 +30,7 @@ pipeline {
             sh '''
 
             
-            git clone --branch master https://{GITHUB_CREDS_USR}:${GITHUB_CREDS_PSW}@${ONESOURCE_REPO} ${ONESOURCE_DIR}
+            git clone --branch master https://${GITHUB_CREDS_USR}:${GITHUB_CREDS_PSW}@${ONESOURCE_REPO} ${ONESOURCE_DIR}
             dir("${WORKSPACE}/pre-silicon-triage"){
   
             python3 -m venv .my_env
