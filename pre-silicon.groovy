@@ -77,7 +77,8 @@ pipeline {
             curl -sSf -H "X-JFrog-Art-Api:AKCp8kq2vs8PPFLb37nAsPU7uMHMWXwqe4L2dy1DVQpc8obVMArgioc9hw3BF62XJwoKGz6qc" -O "https://ubit-artifactory-or.intel.com/artifactory/presipipeline-or-local/db-backup/builds-backup-100322_1603.tar"
             tar xvf builds-backup-100322_1603.tar
             pwd
-            docker cp /builds-backup-100322_1603 mongodb:/data/db
+            ls
+            docker cp ./builds-backup-100322_1603 mongodb:/data/db
             '''
         }
             }
