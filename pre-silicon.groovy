@@ -31,7 +31,6 @@ pipeline {
 
             
             git clone --branch master https://{GITHUB_CREDS_USR}:${GITHUB_CREDS_PSW}@${ONESOURCE_REPO} ${ONESOURCE_DIR}
-            git remote add upstream https://github.com/AdrianaDiAvi/applications.infrastructure.services-framework.pre-silicon-triage.git
             dir("${WORKSPACE}/pre-silicon-triage"){
   
             python3 -m venv .my_env
