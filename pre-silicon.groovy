@@ -14,7 +14,7 @@ def AnalysisTools(){
 
 pipeline {
     agent {
-        label 'devops-rnd'
+        label 'service-fw'
     }
     options {
         timestamps()
