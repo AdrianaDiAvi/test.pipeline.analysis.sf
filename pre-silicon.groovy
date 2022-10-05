@@ -28,8 +28,23 @@ pipeline {
             steps {
             
             sh '''
+
             
-            git clone --branch master https://AdrianaDiAvi:{GITHUB_CREDS}@${ONESOURCE_REPO} ${ONESOURCE_DIR}
+            echo "machine gitlab.devtools.intel.com" > ~/.netrc
+            echo "login not-used" >> ~/.netrc
+            echo "password ${GITLAB_CREDS_PSW}" >> ~/.netrc
+            echo "" >> ~/.netrc
+            echo "machine github.com" >> ~/.netrc
+            echo "login ${GITHUB_CREDS_USR}" >> ~/.netrc
+            echo "password ${GITHUB_CREDS_PSW}" >> ~/.netrc
+            echo "" >> ~/.netrc
+            echo "machine api.github.com" >> ~/.netrc
+            echo "login ${GITHUB_CREDS_USR}" >> ~/.netrc
+            echo "password ${GITHUB_CREDS_PSW}" >> ~/.netrc
+            chmod 600 ~/.netrc
+        
+            
+            git clone --branch master https://AdrianaDiAvi:{GITHUB_CREDS_USR}@${GITHUB_CREDS_PSW} ${ONESOURCE_DIR}
             git remote add upstream https://github.com/AdrianaDiAvi/applications.infrastructure.services-framework.pre-silicon-triage.git
             dir("${WORKSPACE}/pre-silicon-triage"){
   
