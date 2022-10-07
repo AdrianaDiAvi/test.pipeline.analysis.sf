@@ -3,6 +3,7 @@ def AnalysisTools(){
  dir("${WORKSPACE}/${ONESOURCE_DIR}/applications.infrastructure.services-framework.pre-silicon-triage"){
   
         sh '''
+            alias dotriage='docker run -it --rm -w `pwd` -v `pwd`:`pwd` -e no_proxy=".intel.com, 10.0.0.0/8" triage-builder'
             dotriage ./build-database/generate-wiki-validation-report.py --collection "executions" --test > test1.json
         '''
     
@@ -54,8 +55,6 @@ pipeline {
             docker ps
             docker image tag 6ed8a78f6466  triage-builder:latest
             docker images
-            alias dotriage='docker run -it --rm -w `pwd` -v `pwd`:`pwd` -e no_proxy=".intel.com, 10.0.0.0/8" triage-builder'
-            docker ps
             '''
             }
             input('Do you want to proceed')
