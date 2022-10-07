@@ -3,7 +3,6 @@ def AnalysisTools(){
  dir("${WORKSPACE}/${ONESOURCE_DIR}/applications.infrastructure.services-framework.pre-silicon-triage"){
   
         sh '''
-            alias dotriage='docker run -it --rm -w `pwd` -v `pwd`:`pwd` -e no_proxy=".intel.com, 10.0.0.0/8" triage-builder'
             dotriage ./build-database/generate-wiki-validation-report.py --collection "executions" --test > b.json
         '''
     
@@ -19,9 +18,10 @@ pipeline {
     }
         environment {
         GITHUB_CREDS = credentials('one-source-token-personal')
-        LOG_DIR = "${WORKSPACE}/results/workload"
         ONESOURCE_DIR = "pre-silicon-triage"
         ONESOURCE_REPO =   "github.com/AdrianaDiAvi/applications.infrastructure.services-framework.pre-silicon-triage.git"
+        ARTIFACTORY_CREDS = credentials('artifactory-token')
+        ARTIFACTORY_REPO = "https://ubit-artifactory-or.intel.com/artifactory/presipipeline-or-local"
         
     }
 
@@ -48,60 +48,15 @@ pipeline {
             sh '''
             python3 -m venv .venv/
             source .venv/bin/activate
-            pip3 install --upgrade pip
-            pip3 install -r requirements.txt
-            black .
-            flake8 .
-            pre-commit install
-            pre-commit run --all-files
-
-            '''
-            }
-
-            }
-        
-        }
-
-        stage('Docker-compose install'){
-            steps {
-            
-            sh '''
-            sudo curl -L "https://github.com/docker/compose/releases/download/1.23.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-            sudo chmod +x /usr/local/bin/docker-compose
-            docker-compose --version
-            
-            '''
-        dir("${WORKSPACE}/${ONESOURCE_DIR}"){
-            sh '''
-            docker-compose up -d
+            curl -sSf -H "X-JFrog-Art-Api:${ARTIFACTORY_CREDS}" -O ${ARTIFACTORY_REPO}/triage-builder
+            docker load ./triage-builder
+            docker images
             docker ps
-
+            alias dotriage='docker run -it --rm -w `pwd` -v `pwd`:`pwd` -e no_proxy=".intel.com, 10.0.0.0/8" triage-builder'
+            docker ps
             '''
-        }
             }
-        }
-
-        stage("Backup from artifactory"){
-            steps{
-        dir("${WORKSPACE}/${ONESOURCE_DIR}/applications.infrastructure.services-framework.pre-silicon-triage"){
-            sh '''
-            curl -sSf -H "X-JFrog-Art-Api:AKCp8kq2vs8PPFLb37nAsPU7uMHMWXwqe4L2dy1DVQpc8obVMArgioc9hw3BF62XJwoKGz6qc" -O "https://ubit-artifactory-or.intel.com/artifactory/presipipeline-or-local/db-backup/builds-backup-100322_1603.tar"
-            tar xvf builds-backup-100322_1603.tar
-            pwd
-            ls
-            docker cp ./builds-backup-100322_1603 mongodb:/data/db
-            '''
-        }
-            }
-        }
-        /*
-        stage("Restore for the mongo db"){
-            steps{
-            sh '''
-            docker exec --tty mongodb bash
-            mongorestore --drop builds-backup-100322_1603
-
-            '''
+            input('Do you want to proceed')
             }
         
         }
@@ -110,17 +65,18 @@ pipeline {
             steps{
         dir ("${WORKSPACE}") {
             AnalysisTools()
+            input('Do you want to proceed')
         }
             
             }
         
         }
-    */    
+    
 }
   post {
     always {
         cleanWs()
         }
-    }
+    } 
 
 }
