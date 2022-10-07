@@ -55,8 +55,9 @@ pipeline {
             docker ps
             docker image tag 6ed8a78f6466  triage-builder:latest
             docker images
-            alias dotriage='docker run -i --rm -w `pwd` -v `pwd`:`pwd` -e no_proxy=".intel.com, 10.0.0.0/8" triage-builder'
+            alias dotriage='docker run -t --rm -w `pwd` -v `pwd`:`pwd` -e no_proxy=".intel.com, 10.0.0.0/8" triage-builder'
             ls
+            pwd
             dotriage ./build-database/generate-wiki-validation-report.py --collection "executions" --test > test1.json
             '''
             }
