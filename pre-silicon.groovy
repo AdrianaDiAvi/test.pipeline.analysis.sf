@@ -52,6 +52,8 @@ pipeline {
             docker load -i docker-triage.tar
             docker images
             docker ps
+            docker image tag 6ed8a78f6466  triage-builder:latest
+            docker images
             alias dotriage='docker run -it --rm -w `pwd` -v `pwd`:`pwd` -e no_proxy=".intel.com, 10.0.0.0/8" triage-builder'
             docker ps
             '''
