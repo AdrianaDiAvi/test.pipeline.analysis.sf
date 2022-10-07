@@ -3,7 +3,7 @@ def AnalysisTools(){
  dir("${WORKSPACE}/${ONESOURCE_DIR}/applications.infrastructure.services-framework.pre-silicon-triage"){
   
         sh '''
-            dotriage ./build-database/generate-wiki-validation-report.py --collection "executions" --test > b.json
+            dotriage ./build-database/generate-wiki-validation-report.py --collection "executions" --test > test1.json
         '''
     
   }
@@ -48,8 +48,8 @@ pipeline {
             sh '''
             python3 -m venv .venv/
             source .venv/bin/activate
-            curl -sSf -H "X-JFrog-Art-Api:${ARTIFACTORY_CREDS}" -O ${ARTIFACTORY_REPO}/triage-builder
-            docker load ./triage-builder
+            curl -sSf -H "X-JFrog-Art-Api:${ARTIFACTORY_CREDS}" -O ${ARTIFACTORY_REPO}/docker-triage.tar
+            docker load -i docker-triage.tar
             docker images
             docker ps
             alias dotriage='docker run -it --rm -w `pwd` -v `pwd`:`pwd` -e no_proxy=".intel.com, 10.0.0.0/8" triage-builder'
@@ -63,10 +63,10 @@ pipeline {
 
         stage("First function to send wiki validation"){
             steps{
-        dir ("${WORKSPACE}") {
+        
             AnalysisTools()
             input('Do you want to proceed')
-        }
+
             
             }
         
