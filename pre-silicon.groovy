@@ -64,15 +64,20 @@ pipeline {
 
         stage("Fuction to send data"){
             steps{
+        dir("${WORKSPACE}/${ONESOURCE_DIR}"){
                 script{
                 switch(env.TOOL) {
                     case "Validation Report Wiki":
-                        sh '''
-                        alias dotriage='docker run -i --rm -w `pwd` -v `pwd`:`pwd` -e no_proxy=".intel.com, 10.0.0.0/8" triage-builder'
-                        dotriage ./build-database/generate-wiki-validation-report.py --collection "executions" --test > testfinal.json
-                        '''
-                        input('Do you want to proceed')
-                        break
+                        
+                            sh '''
+                            alias dotriage='docker run -i --rm -w `pwd` -v `pwd`:`pwd` -e no_proxy=".intel.com, 10.0.0.0/8" triage-builder'
+                            ls
+                            pwd
+                            dotriage ./build-database/generate-wiki-validation-report.py --collection "executions" --test > test1.json
+                            '''
+                            input('Do you want to proceed')
+                            break
+                        
                     case "KPI Report Wiki":
                         sh '''
                         echo "the second case"
@@ -85,11 +90,14 @@ pipeline {
                         break
                     }
                 }
-        
             }
+        
+        }
     
         }
     }
+    
+
   post {
     always {
         cleanWs()
