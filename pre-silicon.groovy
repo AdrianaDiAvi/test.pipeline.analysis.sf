@@ -18,11 +18,17 @@ pipeline {
 
     parameters {
         choice(name: 'VERSION',
-         choices: ['21.39', '21.47', '21.52', '22.05', '22.13', '22.27', '22.33', '22.44', '22.50','22.54', '22.60'],
+         choices: ['21.39', '21.47', '21.52', '22.05', '22.13', '22.18', '22.27', '22.33', '22.44', '22.50','22.54', '22.60'],
          description:'Services Framework Version')
         choice(name: 'TOOL',
          choices: ['Validation Report Wiki', 'KPI Report Wiki', 'Validation Report Cumulus'],
          description:'Services Framework Tools')
+        string(name: 'IDSID',
+            defaultValue: '',
+            description: 'IDSIS Argument, To KPI wiki data')
+        string(name: 'PASSWORD',
+            defaultValue: '',
+            description: 'Password Argument, To KPI wiki data')
     }
     stages {
         stage('Setup Repo Triage'){
@@ -70,14 +76,18 @@ pipeline {
                     case "KPI Report Wiki":
                         sh '''
                         echo "the second case"
+                        alias dotriage='docker run -i --rm -w `pwd` -v `pwd`:`pwd` -e no_proxy=".intel.com, 10.0.0.0/8" triage-builder'
+                        dotriage ./build-database/generate-wiki-kpi-report.py --collection "executions" --test > testfinalkpi.md --idsid "${IDSID}" --password "${PASSWORD}"
                         
                         '''
+                        input('Do you want to proceed')
                         break
                     case "Validation Report Cumulus":
                         sh '''
                         echo "the third case"
-                        ./build-database/update-cumulus-validation-report.py  --release "v22.18" --buildsdb "mongodb://presibuilds_ro:zCzRyEa9gJdAbU3@p1or1mon031.amr.corp.intel.com:7765,p2or1mon031.amr.corp.intel.com:7765,p3or1mon031.amr.corp.intel.com:7765/presibuilds?ssl=true&replicaSet=mongo7765" --cumulusdb "http://10.88.81.185:5000" --collection "executions_v2218"
+                        ./build-database/update-cumulus-validation-report.py  --release "${VERSION}" --buildsdb "mongodb://presibuilds_ro:zCzRyEa9gJdAbU3@p1or1mon031.amr.corp.intel.com:7765,p2or1mon031.amr.corp.intel.com:7765,p3or1mon031.amr.corp.intel.com:7765/presibuilds?ssl=true&replicaSet=mongo7765" --cumulusdb "http://10.88.81.185:5000" --collection "executions_v2218"
                         '''
+                        input('Do you want to proceed')
                         break
                     }
                 }
