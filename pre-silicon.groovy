@@ -32,7 +32,7 @@ pipeline {
 
             mkdir ${ONESOURCE_DIR}
             git clone https://${GITHUB_CREDS_USR}:${GITHUB_CREDS_PSW}@${ONESOURCE_REPO} ${ONESOURCE_DIR}
-            pip3 install -r requirements.txt
+            
             '''
         
         dir("${WORKSPACE}/${ONESOURCE_DIR}"){
@@ -40,6 +40,7 @@ pipeline {
             sh '''
             python3 -m venv .venv/
             source .venv/bin/activate
+            pip3 install -r requirements.txt
             curl -sSf -H "X-JFrog-Art-Api:${ARTIFACTORY_CREDS}" -O ${ARTIFACTORY_REPO}/docker-triage.tar
             docker load -i docker-triage.tar
             docker images
