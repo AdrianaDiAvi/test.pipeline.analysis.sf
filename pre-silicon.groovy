@@ -40,12 +40,9 @@ pipeline {
             sh '''
             python3 -m venv .venv/
             source .venv/bin/activate
-            curl -sSf -H "X-JFrog-Art-Api:${ARTIFACTORY_CREDS}" -O ${ARTIFACTORY_REPO}/docker-triage.tar
-            docker load -i docker-triage.tar
-            docker images
-            docker ps
-            docker image tag 6ed8a78f6466  triage-builder:latest
-            docker images
+            python3 -m pip install -r requirements.txt
+            ./update-cumulus-validation-report.py  --release "v22.18" --buildsdb "mongodb://presibuilds_ro:zCzRyEa9gJdAbU3@p1or1mon031.amr.corp.intel.com:7765,p2or1mon031.amr.corp.intel.com:7765,p3or1mon031.amr.corp.intel.com:7765/presibuilds?ssl=true&replicaSet=mongo7765" --cumulusdb "http://10.88.81.185:5000" --collection "executions_v2218"
+
             '''
             }
             input('Do you want to proceed')
@@ -78,15 +75,6 @@ pipeline {
                     case "Validation Report Cumulus":
                         sh '''
                         echo "the third case"
-                        source .venv/bin/activate
-                        pwd
-                        ls
-                        pip3 install -r requirements.txt
-                        cd build-database
-                        pwd
-                        pip3 install pymongo --upgrade
-                        ./update-cumulus-validation-report.py  --release "v22.18" --buildsdb "mongodb://presibuilds_ro:zCzRyEa9gJdAbU3@p1or1mon031.amr.corp.intel.com:7765,p2or1mon031.amr.corp.intel.com:7765,p3or1mon031.amr.corp.intel.com:7765/presibuilds?ssl=true&replicaSet=mongo7765" --cumulusdb "http://10.88.81.185:5000" --collection "executions_v2218"
-                        echo "ready"
                         '''
                         break
                     }
