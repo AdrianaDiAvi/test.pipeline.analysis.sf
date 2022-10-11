@@ -77,6 +77,7 @@ pipeline {
                     case "Validation Report Cumulus":
                         sh '''
                         echo "the third case"
+                        alias dotriage='docker run -i --rm -w `pwd` -v `pwd`:`pwd` -e no_proxy=".intel.com, 10.0.0.0/8" triage-builder'
                         dotriage ./build-database/update-cumulus-validation-report.py  --release "22.18" --buildsdb "mongodb://presibuilds_ro:zCzRyEa9gJdAbU3@p1or1mon031.amr.corp.intel.com:7765,p2or1mon031.amr.corp.intel.com:7765,p3or1mon031.amr.corp.intel.com:7765/presibuilds?ssl=true&replicaSet=mongo7765" --cumulusdb "http://10.88.81.185:5000" --collection executions_v2218
 
                         '''
