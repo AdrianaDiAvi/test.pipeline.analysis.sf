@@ -41,6 +41,7 @@ pipeline {
             python3 -m venv .venv/
             source .venv/bin/activate
             python3 -m pip install -r requirements.txt
+            cd build-database
             ./update-cumulus-validation-report.py  --release "v22.18" --buildsdb "mongodb://presibuilds_ro:zCzRyEa9gJdAbU3@p1or1mon031.amr.corp.intel.com:7765,p2or1mon031.amr.corp.intel.com:7765,p3or1mon031.amr.corp.intel.com:7765/presibuilds?ssl=true&replicaSet=mongo7765" --cumulusdb "http://10.88.81.185:5000" --collection "executions_v2218"
 
             '''
