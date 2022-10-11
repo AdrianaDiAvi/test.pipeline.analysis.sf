@@ -1,14 +1,4 @@
 #!/usr/bin/env groovy
-def AnalysisTools(){
- dir("${WORKSPACE}/${ONESOURCE_DIR}/applications.infrastructure.services-framework.pre-silicon-triage"){
-  
-        sh '''
-            alias dotriage='docker run -i --rm -w `pwd` -v `pwd`:`pwd` -e no_proxy=".intel.com, 10.0.0.0/8" triage-builder'
-            dotriage ./build-database/generate-wiki-validation-report.py --collection "executions" --test > testfinal.json
-        '''
-    
-  }
-}
 
 pipeline {
     agent {
@@ -69,23 +59,25 @@ pipeline {
                 switch(env.TOOL) {
                     case "Validation Report Wiki":
                         
-                            sh '''
-                            alias dotriage='docker run -i --rm -w `pwd` -v `pwd`:`pwd` -e no_proxy=".intel.com, 10.0.0.0/8" triage-builder'
-                            ls
-                            pwd
-                            dotriage ./build-database/generate-wiki-validation-report.py --collection "executions" --test > test1.json
-                            '''
-                            input('Do you want to proceed')
-                            break
+                        sh '''
+                        alias dotriage='docker run -i --rm -w `pwd` -v `pwd`:`pwd` -e no_proxy=".intel.com, 10.0.0.0/8" triage-builder'
+                        ls
+                        pwd
+                        dotriage ./build-database/generate-wiki-validation-report.py --collection "executions" --test > test1.json
+                        '''
+                        input('Do you want to proceed')
+                        break
                         
                     case "KPI Report Wiki":
                         sh '''
                         echo "the second case"
+                        
                         '''
                         break
                     case "Validation Report Cumulus":
                         sh '''
                         echo "the third case"
+                        ./build-database/update-cumulus-validation-report.py --buildsdb "mongodb://presibuilds_ro:zCzRyEa9gJdAbU3@p1or1mon031.amr.corp.intel.com:7765,p2or1mon031.amr.corp.intel.com:7765,p3or1mon031.amr.corp.intel.com:7765/presibuilds?ssl=true&replicaSet=mongo7765" --cumulusdb http://10.88.81.185:5000 --collection executions_v2218
                         '''
                         break
                     }
