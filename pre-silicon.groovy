@@ -4,7 +4,7 @@ def AnalysisTools(){
   
         sh '''
             alias dotriage='docker run -i --rm -w `pwd` -v `pwd`:`pwd` -e no_proxy=".intel.com, 10.0.0.0/8" triage-builder'
-            dotriage ./build-database/generate-wiki-validation-report.py --collection "executions" --test > test1.json
+            dotriage ./build-database/generate-wiki-validation-report.py --collection "executions" --test > testfinal.json
         '''
     
   }
