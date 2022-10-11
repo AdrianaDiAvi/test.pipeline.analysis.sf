@@ -55,10 +55,6 @@ pipeline {
             docker ps
             docker image tag 6ed8a78f6466  triage-builder:latest
             docker images
-            alias dotriage='docker run -i --rm -w `pwd` -v `pwd`:`pwd` -e no_proxy=".intel.com, 10.0.0.0/8" triage-builder'
-            ls
-            pwd
-            dotriage ./build-database/generate-wiki-validation-report.py --collection "executions" --test > test1.json
             '''
             }
             input('Do you want to proceed')
@@ -66,17 +62,34 @@ pipeline {
         
         }
 
-        stage("First function to send wiki validation"){
+        stage("Fuction to send data"){
             steps{
+                script{
+                switch(env.TOOL) {
+                    case "Validation Report Wiki":
+                        sh '''
+                        alias dotriage='docker run -i --rm -w `pwd` -v `pwd`:`pwd` -e no_proxy=".intel.com, 10.0.0.0/8" triage-builder'
+                        dotriage ./build-database/generate-wiki-validation-report.py --collection "executions" --test > testfinal.json
+                        '''
+                        input('Do you want to proceed')
+                        break
+                    case "KPI Report Wiki":
+                        sh '''
+                        echo "the second case"
+                        '''
+                        break
+                    case "Validation Report Cumulus":
+                        sh '''
+                        echo "the third case"
+                        '''
+                        break
+                    }
+                }
         
-            input('Do you want to proceed')
-
-            
             }
-        
-        }
     
-}
+        }
+    }
   post {
     always {
         cleanWs()
