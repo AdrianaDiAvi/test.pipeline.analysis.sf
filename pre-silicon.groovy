@@ -79,6 +79,7 @@ pipeline {
                     case "Validation Report Cumulus":
                         sh '''
                         echo "the third case"
+                        source .venv/bin/activate
                         ./build-database/update-cumulus-validation-report.py  --release "22.18" --buildsdb "mongodb://presibuilds_ro:zCzRyEa9gJdAbU3@p1or1mon031.amr.corp.intel.com:7765,p2or1mon031.amr.corp.intel.com:7765,p3or1mon031.amr.corp.intel.com:7765/presibuilds?ssl=true&replicaSet=mongo7765" --cumulusdb "http://10.88.81.185:5000" --collection executions_v2218
                         echo "ready"
                         '''
