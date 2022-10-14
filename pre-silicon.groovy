@@ -71,7 +71,7 @@ pipeline {
                         sh '''
                         alias dotriage='docker run -i --rm -w `pwd` -v `pwd`:`pwd` -e no_proxy=".intel.com, 10.0.0.0/8" triage-builder'
                         dotriage ./build-database/generate-wiki-validation-report.py --collection "executions" > m.md
-                        cd ${ONESOURCE_DIR_WIKI}
+                        mkdir ${ONESOURCE_DIR_WIKI}
                         git -C ${ONESOURCE_DIR_WIKI} pull || git clone https://${GITHUB_CREDS_USR}:${GITHUB_CREDS_PSW}@${ONESOURCE_WIKI_REPO} ${ONESOURCE_DIR_WIKI}
 
 
