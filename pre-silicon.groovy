@@ -13,7 +13,9 @@ pipeline {
         ONESOURCE_REPO =   "github.com/AdrianaDiAvi/applications.infrastructure.services-framework.pre-silicon-triage.git"
         ARTIFACTORY_CREDS = credentials('artifactory-token')
         ARTIFACTORY_REPO = "https://ubit-artifactory-or.intel.com/artifactory/presipipeline-or-local"
-        
+        ONESOURCE_DIR_WIKI = "${WORKSPACE}/wiki"
+        ONESOURCE_WIKI_REPO = "github.com/AdrianaDiAvi/applications.benchmarking.benchmark.platform-hero-features.wiki.git"
+        WIKI_MAIN_BRANCH='master'
     }
 
     parameters {
@@ -69,6 +71,10 @@ pipeline {
                         sh '''
                         alias dotriage='docker run -i --rm -w `pwd` -v `pwd`:`pwd` -e no_proxy=".intel.com, 10.0.0.0/8" triage-builder'
                         dotriage ./build-database/generate-wiki-validation-report.py --collection "executions" > m.md
+                        cd ${ONESOURCE_DIR_WIKI}
+                        git -C ${ONESOURCE_DIR_WIKI} pull || git clone https://${GITHUB_CREDS_USR}:${GITHUB_CREDS_PSW}@${ONESOURCE_WIKI_REPO} ${ONESOURCE_DIR_WIKI}
+
+
                         '''
                         input('Do you want to proceed')
                         break
@@ -78,6 +84,8 @@ pipeline {
                         echo "the second case"
                         alias dotriage='docker run -i --rm -w `pwd` -v `pwd`:`pwd` -e no_proxy=".intel.com, 10.0.0.0/8" triage-builder'
                         dotriage ./build-database/generate-wiki-kpi-report.py --collection "executions" --test > testfinalkpi.md --idsid "${IDSID}" --password "${PASSWORD}"
+                        cd ${ONESOURCE_DIR_WIKI}
+                        git -C ${ONESOURCE_DIR_WIKI} pull || git clone https://${GITHUB_CREDS_USR}:${GITHUB_CREDS_PSW}@${ONESOURCE_WIKI_REPO} ${ONESOURCE_DIR_WIKI}
                         
                         '''
                         input('Do you want to proceed')
