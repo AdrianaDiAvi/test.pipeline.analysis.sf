@@ -61,6 +61,30 @@ pipeline {
         
         }
 
+        stage('Setup Repo Wiki'){
+            steps {
+            
+            sh '''
+
+            mkdir ${ONESOURCE_DIR_WIKI}
+            git -C ${ONESOURCE_DIR_WIKI} pull || git clone https://${GITHUB_CREDS_USR}:${GITHUB_CREDS_PSW}@${ONESOURCE_WIKI_REPO} ${ONESOURCE_DIR_WIKI}
+
+            
+            '''
+        
+        dir("${WORKSPACE}/${ONESOURCE_DIR_WIKI}"){
+
+            sh '''
+            git config user.email adriana.diaz.avila@intel.com
+            git config user.name AdrianaDiAvi
+            git checkout ${WIKI_MAIN_BRANCH}
+
+            '''
+            }
+            input('Do you want to proceed')
+            }
+        }
+
         stage("Fuction to send data"){
             steps{
         dir("${WORKSPACE}/${ONESOURCE_DIR}"){
@@ -71,8 +95,7 @@ pipeline {
                         sh '''
                         alias dotriage='docker run -i --rm -w `pwd` -v `pwd`:`pwd` -e no_proxy=".intel.com, 10.0.0.0/8" triage-builder'
                         dotriage ./build-database/generate-wiki-validation-report.py --collection "executions" > m.md
-                        mkdir ${ONESOURCE_DIR_WIKI}
-                        git -C ${ONESOURCE_DIR_WIKI} pull || git clone https://${GITHUB_CREDS_USR}:${GITHUB_CREDS_PSW}@${ONESOURCE_WIKI_REPO} ${ONESOURCE_DIR_WIKI}
+                        
 
 
                         '''
@@ -84,8 +107,7 @@ pipeline {
                         echo "the second case"
                         alias dotriage='docker run -i --rm -w `pwd` -v `pwd`:`pwd` -e no_proxy=".intel.com, 10.0.0.0/8" triage-builder'
                         dotriage ./build-database/generate-wiki-kpi-report.py --collection "executions" --test > testfinalkpi.md --idsid "${IDSID}" --password "${PASSWORD}"
-                        cd ${ONESOURCE_DIR_WIKI}
-                        git -C ${ONESOURCE_DIR_WIKI} pull || git clone https://${GITHUB_CREDS_USR}:${GITHUB_CREDS_PSW}@${ONESOURCE_WIKI_REPO} ${ONESOURCE_DIR_WIKI}
+                        
                         
                         '''
                         input('Do you want to proceed')
