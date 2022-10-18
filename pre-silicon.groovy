@@ -2,7 +2,7 @@
 
 pipeline {
     agent {
-        label 'service-fw-aws'
+        label 'service-fw'
     }
     options {
         timestamps()
