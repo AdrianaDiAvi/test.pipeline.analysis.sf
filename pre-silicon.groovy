@@ -2,7 +2,7 @@
 
 pipeline {
     agent {
-        label 'service-fw'
+        label 'service-fw-aws'
     }
     options {
         timestamps()
@@ -94,11 +94,19 @@ pipeline {
                         
                         sh '''
                         alias dotriage='docker run -i --rm -w `pwd` -v `pwd`:`pwd` -e no_proxy=".intel.com, 10.0.0.0/8" triage-builder'
-                        dotriage ./build-database/generate-wiki-validation-report.py --collection "executions" > m.md
-                        
+                        dotriage ./build-database/generate-wiki-validation-report.py --collection "executions" > release-pre-si-validation-v{$VERSION}.md
+                        pwd
+                        cp ./release-pre-si-validation-v{$VERSION}.md ${WORKSPACE}/${ONESOURCE_DIR_WIKI}/validation/pre_release_validation/release-pre-si-validation-v{$VERSION}.md
 
 
                         '''
+                        dir("${WORKSPACE}"){
+                            sh '''
+                                    python3 send-data-wiki.py
+                                
+                                '''
+                                
+                            }
                         input('Do you want to proceed')
                         break
                         
