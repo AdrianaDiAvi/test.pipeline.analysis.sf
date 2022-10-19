@@ -118,6 +118,7 @@ pipeline {
                         sh '''
                         pwd
                         git status
+                        sh script/update-homepage.sh > Home.md
                         git add .
                         git status
                         git commit -m "Testing Pipeline for Analysis SF"
