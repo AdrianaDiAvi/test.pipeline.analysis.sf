@@ -114,10 +114,12 @@ pipeline {
                                 
                             }
                         input('Do you want to proceed')
-                        dir("${WORKSPACE}/${ONESOURCE_DIR_WIKI}"){
+                        dir("${ONESOURCE_DIR_WIKI}"){
                         sh '''
+                        pwd
                         git status
                         git add .
+                        git status
                         git commit -m "Testing Pipeline for Analysis SF"
                         git push origin master
                         git show
