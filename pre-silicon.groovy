@@ -36,12 +36,6 @@ pipeline {
         choice(name: 'TOOL',
          choices: ['Validation Report Wiki', 'KPI Report Wiki', 'Validation Report Cumulus'],
          description:'Services Framework Tools')
-        string(name: 'IDSID',
-            defaultValue: '',
-            description: 'IDSIS Argument, To KPI wiki data')
-        string(name: 'PASSWORD',
-            defaultValue: '',
-            description: 'Password Argument, To KPI wiki data')
     }
     stages {
         stage('Setup Repo Triage'){
@@ -133,10 +127,9 @@ pipeline {
                         sh '''
                         echo "the second case"
                         alias dotriage='docker run -i --rm -w `pwd` -v `pwd`:`pwd` -e no_proxy=".intel.com, 10.0.0.0/8" triage-builder'
-                        dotriage ./build-database/generate-wiki-kpi-report.py --collection "executions" --test > testfinalkpi.md --idsid "${IDSID}" --password "${PASSWORD}"
-                        
-                        
+                        dotriage ./build-database/generate-wiki-kpi-report.py --collection "executions" --test > testfinalkpi.md --idsid "${ARTIFACTORY_CREDS_USR}" --password "${ARTIFACTORY_CREDS_PSW}"
                         '''
+                        
                         input('Do you want to proceed')
                         break
                     case "Validation Report Cumulus":
