@@ -1,5 +1,16 @@
 #!/usr/bin/env groovy
-
+def AnalysisTools(){
+  checkout([$class: 'GitSCM', doGenerateSubmoduleConfigurations: false,
+    extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: "${Workspace}/ONESOURCE_DIR"]],
+    submoduleCfg: [], branches: [[name: 'development']], userRemoteConfigs: [[credentialsId: 'one-source-token-personal',
+    url: 'https://github.com/AdrianaDiAvi/test.pipeline.analysis.sf.git']]])
+ dir("${WORKSPACE}/${ONESOURCE_DIR}"){
+  sh '''
+    python3 send-data-wiki.py
+    '''
+    
+  }
+}
 pipeline {
     agent {
         label 'service-fw'
@@ -96,15 +107,12 @@ pipeline {
                         alias dotriage='docker run -i --rm -w `pwd` -v `pwd`:`pwd` -e no_proxy=".intel.com, 10.0.0.0/8" triage-builder'
                         dotriage ./build-database/generate-wiki-validation-report.py --collection "executions" > release-pre-si-validation-v${VERSION}.md
                         pwd
-                        cp ./release-pre-si-validation-v${VERSION}.md ${WORKSPACE}/${ONESOURCE_DIR_WIKI}/validation/pre_release_validation/release-pre-si-validation-v${VERSION}.md
+                        cp ./build-database/release-pre-si-validation-v${VERSION}.md ${WORKSPACE}/${ONESOURCE_DIR_WIKI}/validation/pre_release_validation/release-pre-si-validation-v${VERSION}.md
 
 
                         '''
                         dir("${WORKSPACE}"){
-                            sh '''
-                                    python3 send-data-wiki.py
-                                
-                                '''
+                            AnalysisTools()
                                 
                             }
                         input('Do you want to proceed')
