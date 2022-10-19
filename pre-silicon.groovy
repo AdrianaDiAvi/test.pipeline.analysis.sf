@@ -105,10 +105,7 @@ pipeline {
                         
                         sh '''
                         alias dotriage='docker run -i --rm -w `pwd` -v `pwd`:`pwd` -e no_proxy=".intel.com, 10.0.0.0/8" triage-builder'
-                        dotriage ./build-database/generate-wiki-validation-report.py --collection "executions" > release-pre-si-validation-v${VERSION}.md
-                        pwd
-                        ls
-                        cp ./release-pre-si-validation-v${VERSION}.md ${WORKSPACE}/${ONESOURCE_DIR_WIKI}/validation/pre_release_validation/release-pre-si-validation-v${VERSION}.md
+                        dotriage ./build-database/generate-wiki-validation-report.py --collection "executions" > ${WORKSPACE}/${ONESOURCE_DIR_WIKI}/validation/pre_release_validation/release-pre-si-validation-v${VERSION}.md
                         pwd
                         cd ${WORKSPACE}/${ONESOURCE_DIR_WIKI}/validation/pre_release_validation
                         ls
