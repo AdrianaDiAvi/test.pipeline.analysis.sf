@@ -23,6 +23,7 @@ pipeline {
         ONESOURCE_DIR = "pre-silicon-triage"
         ONESOURCE_REPO =   "github.com/AdrianaDiAvi/applications.infrastructure.services-framework.pre-silicon-triage.git"
         ARTIFACTORY_CREDS = credentials('artifactory-token')
+        ARTIFACTORY = credentials('artifactory-cred')
         ARTIFACTORY_REPO = "https://ubit-artifactory-or.intel.com/artifactory/presipipeline-or-local"
         ONESOURCE_DIR_WIKI = "${WORKSPACE}/wiki"
         ONESOURCE_WIKI_REPO = "github.com/AdrianaDiAvi/applications.benchmarking.benchmark.platform-hero-features.wiki.git"
@@ -127,7 +128,7 @@ pipeline {
                         sh '''
                         echo "the second case"
                         alias dotriage='docker run -i --rm -w `pwd` -v `pwd`:`pwd` -e no_proxy=".intel.com, 10.0.0.0/8" triage-builder'
-                        dotriage ./build-database/generate-wiki-kpi-report.py --collection "executions" --test > testfinalkpi.md --idsid "${ARTIFACTORY_CREDS_USR}" --password "${ARTIFACTORY_CREDS_PSW}"
+                        dotriage ./build-database/generate-wiki-kpi-report.py --collection "executions" --test > testfinalkpi.md --idsid "${ARTIFACTORY_USR}" --password "${ARTIFACTORY_PSW}"
                         '''
                         
                         input('Do you want to proceed')
