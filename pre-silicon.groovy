@@ -108,6 +108,7 @@ pipeline {
                         dotriage ./build-database/generate-wiki-validation-report.py --collection "executions" > ${ONESOURCE_DIR_WIKI}/validation/pre_release_validation/release-pre-si-validation-v${VERSION}.md
                         pwd
                         '''
+                        input('Do you want to proceed')
                         dir("${WORKSPACE}"){
                             AnalysisTools()
                                 
