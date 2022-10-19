@@ -114,6 +114,16 @@ pipeline {
                                 
                             }
                         input('Do you want to proceed')
+                        dir("${WORKSPACE}/${ONESOURCE_DIR_WIKI}"){
+                        sh '''
+                        git status
+                        git add .
+                        git commit -m "Testing Pipeline for Analysis SF"
+                        git push origin master
+                        git show
+                        '''
+                            }
+                        input('Do you want to proceed')
                         break
                         
                     case "KPI Report Wiki":
