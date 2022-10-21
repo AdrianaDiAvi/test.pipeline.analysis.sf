@@ -1,16 +1,5 @@
 #!/usr/bin/env groovy
-def AnalysisTools(){
-  checkout([$class: 'GitSCM', doGenerateSubmoduleConfigurations: false,
-    extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: "${Workspace}"]],
-    submoduleCfg: [], branches: [[name: 'development']], userRemoteConfigs: [[credentialsId: 'one-source-token-personal',
-    url: 'https://github.com/AdrianaDiAvi/test.pipeline.analysis.sf.git']]])
- dir("${WORKSPACE}"){
-  sh '''
-    python3 send-data-wiki.py
-    '''
-    
-  }
-}
+
 pipeline {
     agent {
         label 'service-fw'
@@ -104,9 +93,9 @@ pipeline {
                         pwd
                         '''
                         input('Do you want to proceed')
-                        dir("${WORKSPACE}"){
-                            AnalysisTools()
-                                
+                        script{
+                            def analysis = load "${WORKSPACE}/analysis.groovy"
+                            analysis.validation()
                             }
                         input('Do you want to proceed')
                         dir("${ONESOURCE_DIR_WIKI}"){
@@ -130,6 +119,26 @@ pipeline {
                         alias dotriage='docker run -i --rm -w `pwd` -v `pwd`:`pwd` -e no_proxy=".intel.com, 10.0.0.0/8" triage-builder'
                         dotriage ./build-database/generate-wiki-kpi-report.py --collection "executions" --test > testfinalkpi.md --idsid "${ARTIFACTORY_USR}" --password "${ARTIFACTORY_PSW}"
                         '''
+                        input('Do you want to proceed')
+                        script{
+                            def analysis = load "${WORKSPACE}/analysis.groovy"
+                            analysis.KPI()
+                            }
+                        
+                        input('Do you want to proceed')
+                        dir("${ONESOURCE_DIR_WIKI}"){
+                        sh '''
+                        pwd
+                        git status
+                        sh script/update-homepage.sh > Home.md
+                        git add .
+                        git status
+                        git commit -m "Testing Pipeline for Analysis SF"
+                        git push origin master
+                        git show
+                        '''
+                            }
+                        input('Do you want to proceed')
                         
                         input('Do you want to proceed')
                         break
