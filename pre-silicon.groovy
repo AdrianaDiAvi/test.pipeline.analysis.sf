@@ -67,7 +67,7 @@ pipeline {
             
             '''
         
-        dir("${WORKSPACE}/${ONESOURCE_DIR_WIKI}"){
+        dir("${ONESOURCE_DIR_WIKI}"){
 
             sh '''
             git config user.email adriana.diaz.avila@intel.com
@@ -83,7 +83,7 @@ pipeline {
         stage("Fuction to send data"){
             steps{
         dir("${WORKSPACE}/${ONESOURCE_DIR}"){
-                
+                script{
                 switch(env.TOOL) {
                     case "Validation Report Wiki":
                         
@@ -92,11 +92,10 @@ pipeline {
                         dotriage ./build-database/generate-wiki-validation-report.py --collection "executions" > ${ONESOURCE_DIR_WIKI}/validation/pre_release_validation/release-pre-si-validation-v${VERSION}.md
                         pwd
                         '''
-                        input('Do you want to proceed')
-                        script{
-                            def analysis = load "${WORKSPACE}/analysis.groovy"
-                            analysis.validation('-v True')
-                        }
+                        
+                        def analysis = load "${WORKSPACE}/analysis.groovy"
+                        analysis.validation('-v True')
+                        
                         input('Do you want to proceed')
                         dir("${ONESOURCE_DIR_WIKI}"){
                         sh '''
@@ -150,7 +149,7 @@ pipeline {
                         input('Do you want to proceed')
                         break
                     }
-                
+                }
             }
         
         }
