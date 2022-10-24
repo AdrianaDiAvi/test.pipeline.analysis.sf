@@ -1,4 +1,4 @@
-def validation(){
+def validation(additionalArgs){
   checkout([$class: 'GitSCM', doGenerateSubmoduleConfigurations: false,
     extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: "${Workspace}"]],
     submoduleCfg: [], branches: [[name: 'development']], userRemoteConfigs: [[credentialsId: 'one-source-token-personal',
@@ -11,7 +11,7 @@ def validation(){
   }
 }
 
-def KPI(){
+def KPI(additionalArgs){
   checkout([$class: 'GitSCM', doGenerateSubmoduleConfigurations: false,
     extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: "${Workspace}"]],
     submoduleCfg: [], branches: [[name: 'development']], userRemoteConfigs: [[credentialsId: 'one-source-token-personal',

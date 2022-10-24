@@ -94,7 +94,7 @@ pipeline {
                         '''
                         input('Do you want to proceed')
                         def analysis = load "${WORKSPACE}/analysis.groovy"
-                        analysis.validation()
+                        analysis.validation('-v True')
                         
                         input('Do you want to proceed')
                         dir("${ONESOURCE_DIR_WIKI}"){
@@ -121,7 +121,7 @@ pipeline {
                         input('Do you want to proceed')
                         
                         def analysis = load "${WORKSPACE}/analysis.groovy"
-                        analysis.KPI()
+                        analysis.KPI('-k True')
                             
                         
                         input('Do you want to proceed')
