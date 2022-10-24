@@ -93,10 +93,9 @@ pipeline {
                         pwd
                         '''
                         input('Do you want to proceed')
-                        script{
-                            def analysis = load "${WORKSPACE}/analysis.groovy"
-                            analysis.validation()
-                            }
+                        def analysis = load "${WORKSPACE}/analysis.groovy"
+                        analysis.validation()
+                        
                         input('Do you want to proceed')
                         dir("${ONESOURCE_DIR_WIKI}"){
                         sh '''
@@ -120,10 +119,10 @@ pipeline {
                         dotriage ./build-database/generate-wiki-kpi-report.py --collection "executions" --test > ${ONESOURCE_DIR_WIKI}/validation/pre_release_kpi/release-pre-si-kpi-v${VERSION}.md --idsid "${ARTIFACTORY_USR}" --password "${ARTIFACTORY_PSW}"
                         '''
                         input('Do you want to proceed')
-                        script{
-                            def analysis = load "${WORKSPACE}/analysis.groovy"
-                            analysis.KPI()
-                            }
+                        
+                        def analysis = load "${WORKSPACE}/analysis.groovy"
+                        analysis.KPI()
+                            
                         
                         input('Do you want to proceed')
                         dir("${ONESOURCE_DIR_WIKI}"){
