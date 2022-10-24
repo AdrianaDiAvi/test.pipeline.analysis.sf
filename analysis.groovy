@@ -5,7 +5,7 @@ def validation(){
     url: 'https://github.com/AdrianaDiAvi/test.pipeline.analysis.sf.git']]])
  dir("${WORKSPACE}"){
   sh '''
-    python3 send-data-wiki.py
+    python3 send-data-wiki.py -v True
     '''
     
   }
@@ -18,7 +18,7 @@ def KPI(){
     url: 'https://github.com/AdrianaDiAvi/test.pipeline.analysis.sf.git']]])
  dir("${WORKSPACE}"){
   sh '''
-    python3 send-data-wiki.py
+    python3 send-data-wiki.py -k True
     '''
     
   }

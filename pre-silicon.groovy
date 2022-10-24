@@ -21,7 +21,7 @@ pipeline {
 
     parameters {
         choice(name: 'VERSION',
-         choices: ['21.39', '21.47', '21.52', '22.05', '22.13', '22.18', '22.27', '22.33', '22.44', '22.50','22.54', '22.60'],
+         choices: ['21.39', '21.47', '21.52', '22.05', '22.13', '22.18', '22.27', '22.33', '22.44', '22.50','22.54', '22.60', '22.66'],
          description:'Services Framework Version')
         choice(name: 'TOOL',
          choices: ['Validation Report Wiki', 'KPI Report Wiki', 'Validation Report Cumulus'],
@@ -117,7 +117,7 @@ pipeline {
                         sh '''
                         echo "the second case"
                         alias dotriage='docker run -i --rm -w `pwd` -v `pwd`:`pwd` -e no_proxy=".intel.com, 10.0.0.0/8" triage-builder'
-                        dotriage ./build-database/generate-wiki-kpi-report.py --collection "executions" --test > testfinalkpi.md --idsid "${ARTIFACTORY_USR}" --password "${ARTIFACTORY_PSW}"
+                        dotriage ./build-database/generate-wiki-kpi-report.py --collection "executions" --test > ${ONESOURCE_DIR_WIKI}/validation/pre_release_kpi/release-pre-si-kpi-v${VERSION}.md --idsid "${ARTIFACTORY_USR}" --password "${ARTIFACTORY_PSW}"
                         '''
                         input('Do you want to proceed')
                         script{
@@ -140,7 +140,7 @@ pipeline {
                             }
                         input('Do you want to proceed')
                         
-                        input('Do you want to proceed')
+                        
                         break
                     case "Validation Report Cumulus":
                         sh '''
