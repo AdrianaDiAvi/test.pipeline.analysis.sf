@@ -83,7 +83,7 @@ pipeline {
         stage("Fuction to send data"){
             steps{
         dir("${WORKSPACE}/${ONESOURCE_DIR}"){
-                script{
+                
                 switch(env.TOOL) {
                     case "Validation Report Wiki":
                         
@@ -93,9 +93,10 @@ pipeline {
                         pwd
                         '''
                         input('Do you want to proceed')
-                        def analysis = load "${WORKSPACE}/analysis.groovy"
-                        analysis.validation('-v True')
-                        
+                        script{
+                            def analysis = load "${WORKSPACE}/analysis.groovy"
+                            analysis.validation('-v True')
+                        }
                         input('Do you want to proceed')
                         dir("${ONESOURCE_DIR_WIKI}"){
                         sh '''
@@ -149,7 +150,7 @@ pipeline {
                         input('Do you want to proceed')
                         break
                     }
-                }
+                
             }
         
         }
