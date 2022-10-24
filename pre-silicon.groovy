@@ -92,14 +92,14 @@ pipeline {
                         dotriage ./build-database/generate-wiki-validation-report.py --collection "executions" > ${ONESOURCE_DIR_WIKI}/validation/pre_release_validation/release-pre-si-validation-v${VERSION}.md
                         pwd
                         '''
-                        
+
                         def analysis = load "${WORKSPACE}/analysis.groovy"
                         analysis.validation('-v True')
                         
                         input('Do you want to proceed')
                         dir("${ONESOURCE_DIR_WIKI}"){
                         sh '''
-                        pwd
+                        
                         git status
                         sh script/update-homepage.sh > Home.md
                         git add .
@@ -118,8 +118,7 @@ pipeline {
                         alias dotriage='docker run -i --rm -w `pwd` -v `pwd`:`pwd` -e no_proxy=".intel.com, 10.0.0.0/8" triage-builder'
                         dotriage ./build-database/generate-wiki-kpi-report.py --collection "executions" --test > ${ONESOURCE_DIR_WIKI}/validation/pre_release_kpi/release-pre-si-kpi-v${VERSION}.md --idsid "${ARTIFACTORY_USR}" --password "${ARTIFACTORY_PSW}"
                         '''
-                        input('Do you want to proceed')
-                        
+
                         def analysis = load "${WORKSPACE}/analysis.groovy"
                         analysis.KPI('-k True')
                             
@@ -127,7 +126,7 @@ pipeline {
                         input('Do you want to proceed')
                         dir("${ONESOURCE_DIR_WIKI}"){
                         sh '''
-                        pwd
+                        
                         git status
                         sh script/update-homepage.sh > Home.md
                         git add .
