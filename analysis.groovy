@@ -5,7 +5,7 @@ def validation_kpi(additionalArgs){
     url: 'https://github.com/AdrianaDiAvi/test.pipeline.analysis.sf.git']]])
  dir("${WORKSPACE}"){
   sh '''
-    python3 send-data-wiki.py ${additionalArgs}
+    python3 send-data-wiki.py '$additionalArgs'
     '''
     
   }
